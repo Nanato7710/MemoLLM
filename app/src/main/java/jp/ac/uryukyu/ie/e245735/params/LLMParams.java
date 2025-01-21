@@ -1,9 +1,11 @@
 package jp.ac.uryukyu.ie.e245735.params;
 
+import jp.ac.uryukyu.ie.e245735.Setting;
+
 public class LLMParams {
     private String id;
     private String url;
-    private double temperature;
+    private float temperature;
     private String stopString;
     private int NGpulayers;
 
@@ -23,11 +25,11 @@ public class LLMParams {
         this.url = url;
     }
 
-    public double getTemperature() {
+    public float getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
 
@@ -45,5 +47,9 @@ public class LLMParams {
 
     public void setNGpulayers(int NGpulayers) {
         this.NGpulayers = NGpulayers;
+    }
+
+    public String getModelPath() {
+        return Setting.workingDir + "/models/" + id + ".gguf";
     }
 }
