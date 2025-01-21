@@ -17,9 +17,9 @@ import jp.ac.uryukyu.ie.e245735.params.ChatTemplateParams;
 import jp.ac.uryukyu.ie.e245735.params.LLMParams;
 
 public class Setting {
-    static final private String sep = System.getProperty("file.separator");
-    static final private String home = System.getProperty("user.home");
-    static final private String workingDir = home + sep + ".memollm";
+    public static final String sep = System.getProperty("file.separator");
+    public static final String home = System.getProperty("user.home");
+    public static final String workingDir = home + sep + ".memollm";
 
     private ChatTemplateParams chatTemplateParams;
     private LLMParams llmParams;
