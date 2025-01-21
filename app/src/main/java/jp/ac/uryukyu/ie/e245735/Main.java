@@ -4,5 +4,6 @@ public class Main {
     public static void main(String[] args) {
         Setting setting = new Setting();
         setting.init();
+        ChatTemplate chatTemplate = new ChatTemplate(setting.getChatTemplateParams(), setting.getSystemPrompt());
     }
 }
