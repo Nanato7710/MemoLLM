@@ -5,5 +5,6 @@ public class Main {
         Setting setting = new Setting();
         setting.init();
         ChatTemplate chatTemplate = new ChatTemplate(setting.getChatTemplateParams(), setting.getSystemPrompt());
+        LLM llm = new LLM(setting.getLLMParams());
     }
 }
