@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 
 import jp.ac.uryukyu.ie.e245735.params.ChatTemplateParams;
 import jp.ac.uryukyu.ie.e245735.params.LLMParams;
+import jp.ac.uryukyu.ie.e245735.params.MemoParams;
 
 public class Setting {
     public static final String sep = System.getProperty("file.separator");
@@ -23,6 +24,7 @@ public class Setting {
 
     private ChatTemplateParams chatTemplateParams;
     private LLMParams llmParams;
+    private MemoParams memoParams;
 
     public void init() {
         // ディレクトリが存在しない場合は作成
@@ -71,6 +73,7 @@ public class Setting {
                 JsonObject json = gson.fromJson(fr, JsonObject.class);
                 chatTemplateParams = gson.fromJson(json.get("ChatTemplateParams"), ChatTemplateParams.class);
                 llmParams = gson.fromJson(json.get("LLMParams"), LLMParams.class);
+                memoParams = gson.fromJson(json.get("MemoParams"), MemoParams.class);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -124,5 +127,9 @@ public class Setting {
             }
         }
         return "";
+    }
+
+    public MemoParams getMemoParams() {
+        return memoParams;
     }
 }
