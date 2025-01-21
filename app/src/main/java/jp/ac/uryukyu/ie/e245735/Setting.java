@@ -26,13 +26,22 @@ public class Setting {
 
     public void init() {
         // ディレクトリが存在しない場合は作成
-        java.io.File dir = new java.io.File(workingDir);
+        File dir = new File(workingDir);
         if (!dir.exists()) {
             dir.mkdir();
+            File modelDir = new File(workingDir + sep + "models");
+            modelDir.mkdir();
             makeSetting();
             makeSystemPromptFile();
+            loadSettings();
+            try {
+                Downloader.downloadFileWithProgress(llmParams.getUrl(), modelDir.toString());
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            loadSettings();
         }
-        loadSettings();
     }
 
     private void makeSetting() {
