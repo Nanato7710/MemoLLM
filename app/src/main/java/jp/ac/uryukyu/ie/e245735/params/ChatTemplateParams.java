@@ -4,6 +4,7 @@ public class ChatTemplateParams {
     private String system;
     private String user;
     private String assistant;
+    private String suffix;
 
     public String getSystem() {
         return system;
@@ -27,5 +28,13 @@ public class ChatTemplateParams {
 
     public void setAssistant(String assistant) {
         this.assistant = assistant;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 }
