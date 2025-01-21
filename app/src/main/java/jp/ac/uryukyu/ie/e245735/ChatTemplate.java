@@ -7,6 +7,7 @@ import jp.ac.uryukyu.ie.e245735.params.ChatTemplateParams;
 public class ChatTemplate {
     private ChatTemplateParams params;
     private ArrayList<String> chatHistory = new ArrayList<>();
+    private ArrayList<String> chatHistoryForUser = new ArrayList<>();
     private String systemPrompt;
 
     public ChatTemplate(ChatTemplateParams params, String systemPrompt) {
@@ -16,10 +17,12 @@ public class ChatTemplate {
 
     public void addUserChat(String chat) {
         chatHistory.add(String.format(params.getUser(), chat));
+        chatHistoryForUser.add("You: " + chat);
     }
 
     public void addAssistantChat(String chat) {
         chatHistory.add(String.format(params.getAssistant(), chat));
+        chatHistoryForUser.add("Assistant: " + chat);
     }
 
     @Override
@@ -34,5 +37,13 @@ public class ChatTemplate {
 
     public String convertToInput() {
             return toString() + params.getSuffix();
+    }
+
+    public String getChatHistoryForUser() {
+        StringBuilder sb = new StringBuilder();
+        for (String chat : chatHistoryForUser) {
+            sb.append(chat + "\n");
+        }
+        return sb.toString();
     }
 }
