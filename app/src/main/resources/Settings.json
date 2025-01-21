@@ -11,6 +11,7 @@
         "system" : "<|start_header_id|>system<|end_header_id|>\n\n%s<|eot_id|>",
         "user" : "<|start_header_id|>user<|end_header_id|>\n\n%s<|eot_id|>",
         "assistant" : "<|start_header_id|>assistant<|end_header_id|>\n\n%s<|eot_id|>",
+        "suffix" : "<|start_header_id|>assistant<|end_header_id|>\n\n",
         "systemPrompt" : "default"
     }
 }
