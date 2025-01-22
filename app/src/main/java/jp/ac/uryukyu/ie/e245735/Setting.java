@@ -112,24 +112,28 @@ public class Setting {
         // システムプロンプトファイルを読み込む
         File file = new File(workingDir + sep + "SystemPrompt.md");
         if (file.exists()) {
-            try (FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr)) {
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                return sb.toString();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return readFile(file);
         }
         return "";
     }
 
     public MemoParams getMemoParams() {
         return memoParams;
+    }
+
+    public static String readFile(File file) {
+        StringBuilder sb = new StringBuilder();
+        try (FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr)) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 }
