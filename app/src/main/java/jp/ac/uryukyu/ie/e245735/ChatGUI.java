@@ -62,6 +62,7 @@ public class ChatGUI extends JFrame {
         JScrollPane memoScrollPane = new JScrollPane(memoArea);
         memoScrollPane.setBorder(BorderFactory.createTitledBorder("Memo"));
         memoScrollPane.setPreferredSize(new Dimension(200,400));
+        memoArea.setText(memoParams.getContents());
 
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> saveMemo());
@@ -107,6 +108,7 @@ public class ChatGUI extends JFrame {
         String memoText = memoArea.getText();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(memoParams.getFilePath()))) {
             writer.write(memoText);
+            memoParams.setContents(memoText);
             JOptionPane.showMessageDialog(this, "Saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
