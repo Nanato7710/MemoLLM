@@ -76,11 +76,6 @@ public class ChatGUI extends JFrame {
         setVisible(true);
     }
 
-    private void appendUserChat(String input) {
-        chatTemplate.addUserChat(input);
-        chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
-    }
-
     private String getLLMResponse(String input) {
         String response = "";
         for (LlamaOutput output : llm.generate(input)) {
