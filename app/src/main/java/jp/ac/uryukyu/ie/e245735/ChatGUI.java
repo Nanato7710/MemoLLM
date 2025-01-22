@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.BorderFactory;
 
 import de.kherud.llama.LlamaOutput;
 import jp.ac.uryukyu.ie.e245735.params.MemoParams;
@@ -46,7 +47,8 @@ public class ChatGUI extends JFrame {
 
     private void setupUI() {
         JScrollPane chatScrollPane = new JScrollPane(chatLabel);
-        chatScrollPane.setPreferredSize(new Dimension(400,300));
+        chatScrollPane.setBorder(BorderFactory.createTitledBorder("Chat History"));
+        chatScrollPane.setPreferredSize(new Dimension(600, 400));
 
         JPanel chatPanel = new JPanel();
         chatPanel.add(inputField);
@@ -58,17 +60,22 @@ public class ChatGUI extends JFrame {
 
         memoArea = new JTextArea();
         JScrollPane memoScrollPane = new JScrollPane(memoArea);
-        memoScrollPane.setPreferredSize(new Dimension(200,300));
+        memoScrollPane.setBorder(BorderFactory.createTitledBorder("Memo"));
+        memoScrollPane.setPreferredSize(new Dimension(200,400));
 
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> saveMemo());
 
         JPanel memoPanel = new JPanel();
-        memoPanel.add(BorderLayout.CENTER, memoScrollPane);
-        memoPanel.add(BorderLayout.SOUTH, saveButton);
+        memoPanel.setLayout(new BorderLayout());
+        memoPanel.add(memoScrollPane, BorderLayout.CENTER);
+        memoPanel.add(saveButton, BorderLayout.SOUTH);
+
+        inputField.setToolTipText("メッセージを入力してください...");
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, memoPanel, chatContainer);
         splitPane.setDividerLocation(200);
+        splitPane.setResizeWeight(0.3);
 
         getContentPane().add(splitPane);
         setSize(800,600);
