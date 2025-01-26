@@ -97,7 +97,9 @@ public class ChatGUI extends JFrame {
         if (!userInput.isEmpty()) {
             chatTemplate.addUserChat(userInput);
             chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
-            String response = getLLMResponse(chatTemplate.convertToInput());
+            String structuringMemoPrompt = chatTemplate.getPromptForStructuringMemo(memoParams.getContents());
+            String structuredMemo = getLLMResponse(structuringMemoPrompt);
+            String response = getLLMResponse(chatTemplate.convertToInput(structuredMemo));
             chatTemplate.addAssistantChat(response);
             chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
             inputField.setText("");
