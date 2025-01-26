@@ -25,8 +25,10 @@ public class Setting {
     private ChatTemplateParams chatTemplateParams;
     private LLMParams llmParams;
     private MemoParams memoParams;
+    private String systemPrompt;
+    private String structuringPrompt;
 
-    public void init() {
+    public Setting() {
         // ディレクトリが存在しない場合は作成
         File dir = new File(workingDir);
         if (!dir.exists()) {
@@ -74,6 +76,8 @@ public class Setting {
                 chatTemplateParams = gson.fromJson(json.get("ChatTemplateParams"), ChatTemplateParams.class);
                 llmParams = gson.fromJson(json.get("LLMParams"), LLMParams.class);
                 memoParams = gson.fromJson(json.get("MemoParams"), MemoParams.class);
+                systemPrompt = loadPrompt("SystemPrompt.md");
+                structuringPrompt = loadPrompt("StructuringPrompt.md");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -108,13 +112,27 @@ public class Setting {
         }
     }
 
-    public String getSystemPrompt() {
+    private String loadPrompt(String fileName) {
         // システムプロンプトファイルを読み込む
-        File file = new File(workingDir + sep + "SystemPrompt.md");
+        File file = new File(workingDir + sep + fileName);
         if (file.exists()) {
             return readFile(file);
         }
         return "";
+    }
+
+    public String getSystemPrompt() {
+        if (systemPrompt == null) {
+            systemPrompt = loadPrompt("SystemPrompt.md");
+        }
+        return systemPrompt;
+    }
+
+    public String getStructuringPrompt() {
+        if (structuringPrompt == null) {
+            structuringPrompt = loadPrompt("StructuringPrompt.md");
+        }
+        return structuringPrompt;
     }
 
     public MemoParams getMemoParams() {
