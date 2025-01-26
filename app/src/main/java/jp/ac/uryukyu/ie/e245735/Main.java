@@ -3,8 +3,7 @@ package jp.ac.uryukyu.ie.e245735;
 public class Main {
     public static void main(String[] args) {
         Setting setting = new Setting();
-        setting.init();
-        ChatTemplate chatTemplate = new ChatTemplate(setting.getChatTemplateParams(), setting.getSystemPrompt());
+        ChatTemplate chatTemplate = new ChatTemplate(setting.getChatTemplateParams(), setting.getSystemPrompt(), setting.getStructuringPrompt());
         LLM llm = new LLM(setting.getLLMParams());
         new ChatGUI(chatTemplate, llm, setting.getMemoParams());
     }
