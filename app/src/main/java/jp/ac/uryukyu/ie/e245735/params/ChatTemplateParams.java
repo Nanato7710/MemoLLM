@@ -5,6 +5,7 @@ public class ChatTemplateParams {
     private String user;
     private String assistant;
     private String suffix;
+    private String systemPrompt;
 
     public String getSystem() {
         return system;
