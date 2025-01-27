@@ -16,6 +16,11 @@ public class LLM {
 
     public LLM(LLMParams params) {
         this.params = params;
+        ensureModelDownloaded();
+        initModel();
+    }
+
+    private void ensureModelDownloaded() {
         File modelFile = new File(params.getModelPath());
         if (!modelFile.exists()) {
             try {
@@ -24,19 +29,26 @@ public class LLM {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void initModel() {
         ModelParameters modelParams = new ModelParameters()
-                                        .setModelFilePath(params.getModelPath())
-                                        .setNGpuLayers(params.getNGpulayers());
+                .setModelFilePath(params.getModelPath())
+                .setNGpuLayers(params.getNGpulayers());
         model = new LlamaModel(modelParams);
     }
 
     public LlamaIterable generate(String prompt) {
-        InferenceParameters infParams = new InferenceParameters(prompt)
-                                            .setTemperature(params.getTemperature())
-                                            .setStopStrings(params.getStopString())
-                                            .setPenalizeNl(true)
-                                            .setMiroStat(MiroStat.V2);
+        InferenceParameters infParams = createInferenceParams(prompt);
         return model.generate(infParams);
+    }
+
+    private InferenceParameters createInferenceParams(String prompt) {
+        return new InferenceParameters(prompt)
+                .setTemperature(params.getTemperature())
+                .setStopStrings(params.getStopString())
+                .setPenalizeNl(true)
+                .setMiroStat(MiroStat.V2);
     }
 
     public void close() {
