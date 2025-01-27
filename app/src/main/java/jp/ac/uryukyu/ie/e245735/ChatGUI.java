@@ -99,7 +99,21 @@ public class ChatGUI extends JFrame {
             chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
             String structuringMemoPrompt = chatTemplate.getPromptForStructuringMemo(memoParams.getContents());
             String structuredMemo = getLLMResponse(structuringMemoPrompt);
-            String response = getLLMResponse(chatTemplate.convertToInput(structuredMemo));
+            System.out.println(structuredMemo);
+            String searchPrompt = chatTemplate.getPromptForSearchMemo(structuredMemo, userInput);
+            String result = getLLMResponse(searchPrompt);
+            
+            // resultから<|start_output|>と<|end_output|>の間にある文字列を取得する
+            int startIndex = result.indexOf("<|start_output|>") + "<|start_output|>".length();
+            int endIndex = result.indexOf("<|end_output|>");
+            if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
+                result = result.substring(startIndex, endIndex).trim();
+            } else {
+                result = "";
+            }
+            System.out.println(result);
+            
+            String response = getLLMResponse(chatTemplate.convertToInput(result));
             chatTemplate.addAssistantChat(response);
             chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
             inputField.setText("");

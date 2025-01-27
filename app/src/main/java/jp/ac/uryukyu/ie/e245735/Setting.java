@@ -27,6 +27,7 @@ public class Setting {
     private MemoParams memoParams;
     private String systemPrompt;
     private String structuringPrompt;
+    private String searchPrompt;
 
     public Setting() {
         // ディレクトリが存在しない場合は作成
@@ -36,7 +37,9 @@ public class Setting {
             File modelDir = new File(workingDir + sep + "models");
             modelDir.mkdir();
             makeSetting();
-            makeSystemPromptFile();
+            for (String fileName : new String[] {"SystemPrompt.md", "StructuringPrompt.md", "SearchPrompt.md"}) {
+                makePromptFile(fileName);
+            }
             loadSettings();
             try {
                 Downloader.downloadFileWithProgress(llmParams.getUrl(), modelDir.toString());
@@ -78,6 +81,7 @@ public class Setting {
                 memoParams = gson.fromJson(json.get("MemoParams"), MemoParams.class);
                 systemPrompt = loadPrompt("SystemPrompt.md");
                 structuringPrompt = loadPrompt("StructuringPrompt.md");
+                searchPrompt = loadPrompt("SearchPrompt.md");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -94,11 +98,11 @@ public class Setting {
         return llmParams;
     }
 
-    private void makeSystemPromptFile() {
+    private void makePromptFile(String fileName) {
         // システムプロンプトファイルが存在しない場合は作成
-        File file = new File(workingDir + sep + "SystemPrompt.md");
+        File file = new File(workingDir + sep + fileName);
         if (!file.exists()) {
-            try (InputStream is = getClass().getResourceAsStream("/SystemPrompt.md");
+            try (InputStream is = getClass().getResourceAsStream(sep + fileName);
             BufferedInputStream bis = new BufferedInputStream(is);
             BufferedReader br = new BufferedReader(new InputStreamReader(bis));
             FileWriter fw = new FileWriter(file)) {
@@ -117,8 +121,10 @@ public class Setting {
         File file = new File(workingDir + sep + fileName);
         if (file.exists()) {
             return readFile(file);
+        } else {
+            makePromptFile(fileName);
+            return loadPrompt(fileName);
         }
-        return "";
     }
 
     public String getSystemPrompt() {
@@ -137,6 +143,13 @@ public class Setting {
 
     public MemoParams getMemoParams() {
         return memoParams;
+    }
+
+    public String getSearchPrompt() {
+        if (searchPrompt == null) {
+            searchPrompt = loadPrompt("SearchPrompt.md");
+        }
+        return searchPrompt;
     }
 
     public static String readFile(File file) {
