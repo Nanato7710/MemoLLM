@@ -8,33 +8,33 @@ import de.kherud.llama.LlamaIterable;
 import de.kherud.llama.LlamaModel;
 import de.kherud.llama.ModelParameters;
 import de.kherud.llama.args.MiroStat;
-import jp.ac.uryukyu.ie.e245735.params.LLMParams;
+import jp.ac.uryukyu.ie.e245735.params.LlmParameters;
 
 public class LLM {
-    private LLMParams params;
+    private LlmParameters params;
     private LlamaModel model;
 
-    public LLM(LLMParams params) {
+    public LLM(LlmParameters params) {
         this.params = params;
-        ensureModelDownloaded();
-        initModel();
+        downloadModelIfAbsent();
+        initializeModel();
     }
 
-    private void ensureModelDownloaded() {
+    private void downloadModelIfAbsent() {
         File modelFile = new File(params.getModelPath());
         if (!modelFile.exists()) {
             try {
-                Downloader.downloadFileWithProgress(params.getUrl(), Setting.workingDir + Setting.sep + "models");
+                Downloader.downloadFileWithProgress(params.getUrl(), AppSetting.workingDir + AppSetting.sep + "models");
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void initModel() {
+    private void initializeModel() {
         ModelParameters modelParams = new ModelParameters()
                 .setModelFilePath(params.getModelPath())
-                .setNGpuLayers(params.getNGpulayers());
+                .setNGpuLayers(params.getGpuLayerCount());
         model = new LlamaModel(modelParams);
     }
 
@@ -55,11 +55,11 @@ public class LLM {
         model.close();
     }
 
-    public LLMParams getParams() {
+    public LlmParameters getParams() {
         return params;
     }
 
-    public void setParams(LLMParams params) {
+    public void setParams(LlmParameters params) {
         this.params = params;
     }
 }

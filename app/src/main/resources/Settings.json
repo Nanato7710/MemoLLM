@@ -1,10 +1,10 @@
 {
     "LLMParams" : {
-        "id" : "Llama-3.2-3B-Instruct-Q8_0",
+        "modelId" : "Llama-3.2-3B-Instruct-Q8_0",
         "url" : "https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q8_0.gguf",
         "temperature" : 0.0,
         "stopString" : "<|eot_id|>",
-        "NGpulayers" : 43
+        "gpuLayerCount" : 43
     },
 
     "ChatTemplateParams" : {

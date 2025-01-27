@@ -13,36 +13,36 @@ import java.io.InputStreamReader;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import jp.ac.uryukyu.ie.e245735.params.ChatTemplateParams;
-import jp.ac.uryukyu.ie.e245735.params.LLMParams;
-import jp.ac.uryukyu.ie.e245735.params.MemoParams;
+import jp.ac.uryukyu.ie.e245735.params.ChatTemplateParameters;
+import jp.ac.uryukyu.ie.e245735.params.LlmParameters;
+import jp.ac.uryukyu.ie.e245735.params.MemoParameters;
 
-public class Setting {
+public class AppSetting {
     public static final String sep = System.getProperty("file.separator");
     public static final String home = System.getProperty("user.home");
     public static final String workingDir = home + sep + ".memollm";
 
-    private ChatTemplateParams chatTemplateParams;
-    private LLMParams llmParams;
-    private MemoParams memoParams;
+    private ChatTemplateParameters chatTemplateParams;
+    private LlmParameters llmParams;
+    private MemoParameters memoParams;
     private String systemPrompt;
     private String structuringPrompt;
     private String searchPrompt;
 
-    public Setting() {
-        initSetting();
+    public AppSetting() {
+        initialize();
     }
 
-    private void initSetting() {
+    private void initialize() {
         File dir = new File(workingDir);
         if (!dir.exists()) {
-            createInitialDirectories(dir);
+            createWorkingDirs(dir);
         } else {
             loadSettings();
         }
     }
 
-    private void createInitialDirectories(File dir) {
+    private void createWorkingDirs(File dir) {
         dir.mkdir();
         File modelDir = new File(workingDir + sep + "models");
         modelDir.mkdir();
@@ -87,9 +87,9 @@ public class Setting {
             try (FileReader fr = new FileReader(file)) {
                 Gson gson = new Gson();
                 JsonObject json = gson.fromJson(fr, JsonObject.class);
-                chatTemplateParams = gson.fromJson(json.get("ChatTemplateParams"), ChatTemplateParams.class);
-                llmParams = gson.fromJson(json.get("LLMParams"), LLMParams.class);
-                memoParams = gson.fromJson(json.get("MemoParams"), MemoParams.class);
+                chatTemplateParams = gson.fromJson(json.get("ChatTemplateParams"), ChatTemplateParameters.class);
+                llmParams = gson.fromJson(json.get("LLMParams"), LlmParameters.class);
+                memoParams = gson.fromJson(json.get("MemoParams"), MemoParameters.class);
                 systemPrompt = loadPrompt("SystemPrompt.md");
                 structuringPrompt = loadPrompt("StructuringPrompt.md");
                 searchPrompt = loadPrompt("SearchPrompt.md");
@@ -101,11 +101,11 @@ public class Setting {
         }
     }
 
-    public ChatTemplateParams getChatTemplateParams() {
+    public ChatTemplateParameters getChatTemplateParams() {
         return chatTemplateParams;
     }
 
-    public LLMParams getLLMParams() {
+    public LlmParameters getLLMParams() {
         return llmParams;
     }
 
@@ -152,7 +152,7 @@ public class Setting {
         return structuringPrompt;
     }
 
-    public MemoParams getMemoParams() {
+    public MemoParameters getMemoParams() {
         return memoParams;
     }
 

@@ -2,17 +2,17 @@ package jp.ac.uryukyu.ie.e245735;
 
 import java.util.ArrayList;
 
-import jp.ac.uryukyu.ie.e245735.params.ChatTemplateParams;
+import jp.ac.uryukyu.ie.e245735.params.ChatTemplateParameters;
 
 public class ChatTemplate {
-    private ChatTemplateParams params;
+    private ChatTemplateParameters params;
     private ArrayList<String> chatHistory = new ArrayList<>();
     private ArrayList<String> chatHistoryForUser = new ArrayList<>();
     private String systemPrompt;
     private String structuringPrompt;
     private String searchPrompt;
 
-    public ChatTemplate(ChatTemplateParams params, String systemPrompt, String structuringPrompt, String searchPrompt) {
+    public ChatTemplate(ChatTemplateParameters params, String systemPrompt, String structuringPrompt, String searchPrompt) {
         this.params = params;
         this.systemPrompt = systemPrompt;
         this.structuringPrompt = structuringPrompt;

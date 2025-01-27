@@ -1,20 +1,20 @@
 package jp.ac.uryukyu.ie.e245735.params;
 
-import jp.ac.uryukyu.ie.e245735.Setting;
+import jp.ac.uryukyu.ie.e245735.AppSetting;
 
-public class LLMParams {
-    private String id;
+public class LlmParameters {
+    private String modelId;
     private String url;
     private float temperature;
     private String stopString;
-    private int NGpulayers;
+    private int gpuLayerCount;
 
-    public String getId() {
-        return id;
+    public String getModelId() {
+        return modelId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
     }
 
     public String getUrl() {
@@ -41,12 +41,12 @@ public class LLMParams {
         this.stopString = stopString;
     }
 
-    public int getNGpulayers() {
-        return NGpulayers;
+    public int getGpuLayerCount() {
+        return gpuLayerCount;
     }
 
-    public void setNGpulayers(int NGpulayers) {
-        this.NGpulayers = NGpulayers;
+    public void setGpuLayerCount(int gpuLayerCount) {
+        this.gpuLayerCount = gpuLayerCount;
     }
 
     public String getModelPath() {
@@ -54,6 +54,6 @@ public class LLMParams {
     }
 
     private String buildModelPath() {
-        return Setting.workingDir + "/models/" + id + ".gguf";
+        return AppSetting.workingDir + "/models/" + modelId + ".gguf";
     }
 }

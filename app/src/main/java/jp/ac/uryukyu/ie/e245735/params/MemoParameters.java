@@ -2,9 +2,9 @@ package jp.ac.uryukyu.ie.e245735.params;
 
 import java.io.File;
 
-import jp.ac.uryukyu.ie.e245735.Setting;
+import jp.ac.uryukyu.ie.e245735.AppSetting;
 
-public class MemoParams {
+public class MemoParameters {
     private String fileName;
     private String contents;
 
@@ -13,7 +13,7 @@ public class MemoParams {
     }
 
     public String getFilePath() {
-        return Setting.workingDir + Setting.sep + fileName;
+        return AppSetting.workingDir + AppSetting.sep + fileName;
     }
 
     public String getContents() {
@@ -25,7 +25,7 @@ public class MemoParams {
         if (contents == null) {
             File file = new File(getFilePath());
             if (file.exists()) {
-                contents = Setting.readFile(file);
+                contents = AppSetting.readFile(file);
             }
         }
     }

@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 
 import de.kherud.llama.LlamaOutput;
-import jp.ac.uryukyu.ie.e245735.params.MemoParams;
+import jp.ac.uryukyu.ie.e245735.params.MemoParameters;
 
 public class ChatGUI extends JFrame {
     private JLabel chatLabel;
@@ -27,9 +27,9 @@ public class ChatGUI extends JFrame {
     private JTextArea memoArea;
     private ChatTemplate chatTemplate;
     private LLM llm;
-    private MemoParams memoParams;
+    private MemoParameters memoParams;
 
-    public ChatGUI(ChatTemplate chatTemplate, LLM llm, MemoParams memoParams) {
+    public ChatGUI(ChatTemplate chatTemplate, LLM llm, MemoParameters memoParams) {
         this.chatTemplate = chatTemplate;
         this.llm = llm;
         this.memoParams = memoParams;

@@ -1,6 +1,6 @@
 package jp.ac.uryukyu.ie.e245735.params;
 
-public class ChatTemplateParams {
+public class ChatTemplateParameters {
     private String system;
     private String user;
     private String assistant;
