@@ -17,6 +17,21 @@ import jp.ac.uryukyu.ie.e245735.params.ChatTemplateParameters;
 import jp.ac.uryukyu.ie.e245735.params.LlmParameters;
 import jp.ac.uryukyu.ie.e245735.params.MemoParameters;
 
+/**
+ * AppSetting
+ * 
+ * アプリケーションの設定を保持するクラス
+ * 
+ * @param sep pathのセパレータ
+ * @param home ユーザーディレクトリ
+ * @param workingDir 作業ディレクトリ
+ * @param chatTemplateParams チャットテンプレートのパラメータ
+ * @param llmParams LLMのパラメータ
+ * @param memoParams メモのパラメータ
+ * @param systemPrompt システムプロンプト
+ * @param structuringPrompt 構造化プロンプト
+ * @param searchPrompt 検索プロンプト
+ */
 public class AppSetting {
     public static final String sep = System.getProperty("file.separator");
     public static final String home = System.getProperty("user.home");
@@ -33,6 +48,13 @@ public class AppSetting {
         initialize();
     }
 
+    /**
+     * 初期化処理
+     * 
+     * workingDirが存在しない場合は作成し、設定ファイルを読み込む
+     * システムプロンプトファイルが存在しない場合は作成
+     * モデルファイルが存在しない場合はダウンロード
+     */
     private void initialize() {
         File dir = new File(workingDir);
         if (!dir.exists()) {
@@ -42,6 +64,11 @@ public class AppSetting {
         }
     }
 
+    /**
+     * 作業ディレクトリを作成し、設定ファイルを読み込む
+     * 
+     * @param dir 作業ディレクトリ
+     */
     private void createWorkingDirs(File dir) {
         dir.mkdir();
         File modelDir = new File(workingDir + sep + "models");
@@ -54,6 +81,11 @@ public class AppSetting {
         downloadModelIfNeeded(modelDir);
     }
 
+    /**
+     * モデルファイルをダウンロードする
+     * 
+     * @param modelDir モデルファイルのディレクトリ
+     */
     private void downloadModelIfNeeded(File modelDir) {
         try {
             Downloader.downloadFileWithProgress(llmParams.getUrl(), modelDir.toString());
@@ -62,8 +94,10 @@ public class AppSetting {
         }
     }
 
+    /**
+     * 設定ファイルを作成する
+     */
     private void makeSetting() {
-        // 設定ファイルが存在しない場合は作成
         File file = new File(workingDir + sep + "Settings.json");
         if (!file.exists()) {
             try (InputStream is = getClass().getResourceAsStream("/Settings.json");
@@ -80,8 +114,10 @@ public class AppSetting {
         }
     }
 
+    /**
+     * 設定ファイルを読み込む
+     */
     private void loadSettings() {
-        // 設定ファイルを読み込む
         File file = new File(workingDir + sep + "Settings.json");
         if (file.exists()) {
             try (FileReader fr = new FileReader(file)) {
@@ -101,16 +137,28 @@ public class AppSetting {
         }
     }
 
+    /**
+     * チャットテンプレートのパラメータを取得する
+     * 
+     * @return chatTemplateParams チャットテンプレートのパラメータ
+     */
     public ChatTemplateParameters getChatTemplateParams() {
         return chatTemplateParams;
     }
 
+    /**
+     * LLMのパラメータを取得する
+     * 
+     * @return llmParams LLMのパラメータ
+     */
     public LlmParameters getLLMParams() {
         return llmParams;
     }
 
+    /**
+     * ファイルを作成する
+     */
     private void makePromptFile(String fileName) {
-        // システムプロンプトファイルが存在しない場合は作成
         File file = new File(workingDir + sep + fileName);
         if (!file.exists()) {
             try (InputStream is = getClass().getResourceAsStream(sep + fileName);
@@ -127,8 +175,14 @@ public class AppSetting {
         }
     }
 
+    /**
+     * プロンプトを読み込む
+     * 
+     * @param fileName ファイル名
+     * 
+     * @return プロンプト
+     */
     private String loadPrompt(String fileName) {
-        // システムプロンプトファイルを読み込む
         File file = new File(workingDir + sep + fileName);
         if (file.exists()) {
             return readFile(file);
@@ -138,6 +192,11 @@ public class AppSetting {
         }
     }
 
+    /**
+     * システムプロンプトを取得する
+     * 
+     * @return システムプロンプト
+     */
     public String getSystemPrompt() {
         if (systemPrompt == null) {
             systemPrompt = loadPrompt("SystemPrompt.md");
@@ -145,6 +204,11 @@ public class AppSetting {
         return systemPrompt;
     }
 
+    /**
+     * 構造化プロンプトを取得する
+     * 
+     * @return 構造化プロンプト
+     */
     public String getStructuringPrompt() {
         if (structuringPrompt == null) {
             structuringPrompt = loadPrompt("StructuringPrompt.md");
@@ -152,10 +216,20 @@ public class AppSetting {
         return structuringPrompt;
     }
 
+    /**
+     * メモのパラメータを取得する
+     * 
+     * @return memoParams メモのパラメータ
+     */
     public MemoParameters getMemoParams() {
         return memoParams;
     }
 
+    /**
+     * 検索プロンプトを取得する
+     * 
+     * @return 検索プロンプト
+     */
     public String getSearchPrompt() {
         if (searchPrompt == null) {
             searchPrompt = loadPrompt("SearchPrompt.md");
@@ -163,6 +237,13 @@ public class AppSetting {
         return searchPrompt;
     }
 
+    /**
+     * ファイルを読み込む
+     * 
+     * @param file ファイル
+     * 
+     * @return ファイルの内容
+     */
     public static String readFile(File file) {
         StringBuilder sb = new StringBuilder();
         try (FileReader fr = new FileReader(file);
