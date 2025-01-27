@@ -10,11 +10,13 @@ public class ChatTemplate {
     private ArrayList<String> chatHistoryForUser = new ArrayList<>();
     private String systemPrompt;
     private String structuringPrompt;
+    private String searchPrompt;
 
-    public ChatTemplate(ChatTemplateParams params, String systemPrompt, String structuringPrompt) {
+    public ChatTemplate(ChatTemplateParams params, String systemPrompt, String structuringPrompt, String searchPrompt) {
         this.params = params;
         this.systemPrompt = systemPrompt;
         this.structuringPrompt = structuringPrompt;
+        this.searchPrompt = searchPrompt;
     }
 
     public void addUserChat(String chat) {
@@ -53,6 +55,14 @@ public class ChatTemplate {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format(params.getSystem(), structuringPrompt));
         sb.append(String.format(params.getUser(), memo));
-        return sb.toString();
+        return sb.toString()+params.getSuffix();
     }
+
+    public String getPromptForSearchMemo(String structuredMemo, String query) {
+        StringBuilder sb = new StringBuilder();
+        String input = String.format("```Query\n%s\n```\n\n```DataBase\n%s\n```", query, structuredMemo);
+        sb.append(String.format(params.getSystem(), searchPrompt));
+        sb.append(String.format(params.getUser(), input));
+        return sb.toString()+params.getSuffix();
+    } 
 }
