@@ -14,51 +14,58 @@ import java.util.Optional;
 
 public class Downloader {
     public static void downloadFileWithProgress(String fileURL, String saveDir) throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newBuilder()
+        HttpClient client = createHttpClient();
+        HttpRequest request = createHttpRequest(fileURL);
+        HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+        handleDownloadResponse(response, fileURL, saveDir);
+    }
+
+    private static HttpClient createHttpClient() {
+        return HttpClient.newBuilder()
                 .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
+    }
 
-        HttpRequest request = HttpRequest.newBuilder()
+    private static HttpRequest createHttpRequest(String fileURL) {
+        return HttpRequest.newBuilder()
                 .uri(URI.create(fileURL))
                 .build();
+    }
 
-        HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
-
+    private static void handleDownloadResponse(HttpResponse<InputStream> response, String fileURL, String saveDir)
+            throws IOException {
         if (response.statusCode() == 200) {
-            long contentLength = response.headers()
-                    .firstValueAsLong("Content-Length")
-                    .orElse(-1);
-
+            long contentLength = response.headers().firstValueAsLong("Content-Length").orElse(-1);
             String fileName = extractFileName(response.headers().firstValue("Content-Disposition"), fileURL);
             Path savePath = Path.of(saveDir, fileName);
-
-            try (InputStream inputStream = response.body();
-                OutputStream outputStream = Files.newOutputStream(savePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
-
-                byte[] buffer = new byte[8192];
-                long totalBytesRead = 0;
-                int bytesRead;
-                long lastReportedProgress = 0;
-
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                    totalBytesRead += bytesRead;
-
-                    if (contentLength > 0) {
-                        long progress = (totalBytesRead * 100) / contentLength;
-                        if (progress != lastReportedProgress) {
-                            System.out.printf("ダウンロード進行中: %d%% (%d/%d バイト)%n", progress, totalBytesRead, contentLength);
-                            lastReportedProgress = progress;
-                        }
-                    } else {
-                        System.out.printf("ダウンロード済み: %d バイト%n", totalBytesRead);
-                    }
-                }
-            }
-
+            writeDataWithProgress(response.body(), savePath, contentLength);
             System.out.println("ファイルが " + savePath + " にダウンロードされました。");
         } else {
             System.out.println("HTTPリクエストに失敗しました。ステータスコード: " + response.statusCode());
+        }
+    }
+
+    private static void writeDataWithProgress(InputStream inputStream, Path savePath, long contentLength)
+            throws IOException {
+        try (InputStream in = inputStream;
+             OutputStream out = Files.newOutputStream(savePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+            byte[] buffer = new byte[8192];
+            long totalBytesRead = 0;
+            int bytesRead;
+            long lastReportedProgress = 0;
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+                totalBytesRead += bytesRead;
+                if (contentLength > 0) {
+                    long progress = (totalBytesRead * 100) / contentLength;
+                    if (progress != lastReportedProgress) {
+                        System.out.printf("ダウンロード進行中: %d%% (%d/%d バイト)%n", progress, totalBytesRead, contentLength);
+                        lastReportedProgress = progress;
+                    }
+                } else {
+                    System.out.printf("ダウンロード済み: %d バイト%n", totalBytesRead);
+                }
+            }
         }
     }
 

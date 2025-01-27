@@ -17,13 +17,17 @@ public class MemoParams {
     }
 
     public String getContents() {
+        loadContentsIfNeeded();
+        return contents;
+    }
+
+    private void loadContentsIfNeeded() {
         if (contents == null) {
             File file = new File(getFilePath());
             if (file.exists()) {
                 contents = Setting.readFile(file);
             }
         }
-        return contents;
     }
 
     public void setContents(String contents) {

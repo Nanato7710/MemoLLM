@@ -95,29 +95,34 @@ public class ChatGUI extends JFrame {
     private void handleSendMessage() {
         String userInput = inputField.getText();
         if (!userInput.isEmpty()) {
-            chatTemplate.addUserChat(userInput);
-            chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
-            String structuringMemoPrompt = chatTemplate.getPromptForStructuringMemo(memoParams.getContents());
-            String structuredMemo = getLLMResponse(structuringMemoPrompt);
-            System.out.println(structuredMemo);
-            String searchPrompt = chatTemplate.getPromptForSearchMemo(structuredMemo, userInput);
-            String result = getLLMResponse(searchPrompt);
-            
-            // resultから<|start_output|>と<|end_output|>の間にある文字列を取得する
-            int startIndex = result.indexOf("<|start_output|>") + "<|start_output|>".length();
-            int endIndex = result.indexOf("<|end_output|>");
-            if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
-                result = result.substring(startIndex, endIndex).trim();
-            } else {
-                result = "";
-            }
-            System.out.println(result);
-            
-            String response = getLLMResponse(chatTemplate.convertToInput(result));
-            chatTemplate.addAssistantChat(response);
-            chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
+            processUserChat(userInput);
             inputField.setText("");
         }
+    }
+
+    private void processUserChat(String userInput) {
+        chatTemplate.addUserChat(userInput);
+        updateChatLabel();
+        String structuredMemo = getLLMResponse(chatTemplate.getPromptForStructuringMemo(memoParams.getContents()));
+        String searchResult = extractSearchResult(userInput, structuredMemo);
+        String response = getLLMResponse(chatTemplate.convertToInput(searchResult));
+        chatTemplate.addAssistantChat(response);
+        updateChatLabel();
+    }
+
+    private void updateChatLabel() {
+        chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
+    }
+
+    private String extractSearchResult(String userInput, String structuredMemo) {
+        String searchPrompt = chatTemplate.getPromptForSearchMemo(structuredMemo, userInput);
+        String result = getLLMResponse(searchPrompt);
+        int startIndex = result.indexOf("<|start_output|>") + "<|start_output|>".length();
+        int endIndex = result.indexOf("<|end_output|>");
+        if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
+            return result.substring(startIndex, endIndex).trim();
+        }
+        return "";
     }
 
     private void saveMemo() {

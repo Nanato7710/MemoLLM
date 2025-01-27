@@ -50,6 +50,10 @@ public class LLMParams {
     }
 
     public String getModelPath() {
+        return buildModelPath();
+    }
+
+    private String buildModelPath() {
         return Setting.workingDir + "/models/" + id + ".gguf";
     }
 }

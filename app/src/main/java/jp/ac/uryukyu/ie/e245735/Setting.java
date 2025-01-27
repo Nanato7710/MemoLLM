@@ -30,24 +30,35 @@ public class Setting {
     private String searchPrompt;
 
     public Setting() {
-        // ディレクトリが存在しない場合は作成
+        initSetting();
+    }
+
+    private void initSetting() {
         File dir = new File(workingDir);
         if (!dir.exists()) {
-            dir.mkdir();
-            File modelDir = new File(workingDir + sep + "models");
-            modelDir.mkdir();
-            makeSetting();
-            for (String fileName : new String[] {"SystemPrompt.md", "StructuringPrompt.md", "SearchPrompt.md"}) {
-                makePromptFile(fileName);
-            }
-            loadSettings();
-            try {
-                Downloader.downloadFileWithProgress(llmParams.getUrl(), modelDir.toString());
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
+            createInitialDirectories(dir);
         } else {
             loadSettings();
+        }
+    }
+
+    private void createInitialDirectories(File dir) {
+        dir.mkdir();
+        File modelDir = new File(workingDir + sep + "models");
+        modelDir.mkdir();
+        makeSetting();
+        for (String fileName : new String[] {"SystemPrompt.md", "StructuringPrompt.md", "SearchPrompt.md"}) {
+            makePromptFile(fileName);
+        }
+        loadSettings();
+        downloadModelIfNeeded(modelDir);
+    }
+
+    private void downloadModelIfNeeded(File modelDir) {
+        try {
+            Downloader.downloadFileWithProgress(llmParams.getUrl(), modelDir.toString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

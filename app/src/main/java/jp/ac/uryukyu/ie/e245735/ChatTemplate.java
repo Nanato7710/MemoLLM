@@ -20,19 +20,36 @@ public class ChatTemplate {
     }
 
     public void addUserChat(String chat) {
-        chatHistory.add(String.format(params.getUser(), chat));
+        String formatted = formatUserChat(chat);
+        chatHistory.add(formatted);
         chatHistoryForUser.add("You: " + chat);
     }
 
     public void addAssistantChat(String chat) {
-        chatHistory.add(String.format(params.getAssistant(), chat));
+        String formatted = formatAssistantChat(chat);
+        chatHistory.add(formatted);
         chatHistoryForUser.add("Assistant: " + chat);
+    }
+
+    private String formatUserChat(String chat) {
+        return String.format(params.getUser(), chat);
+    }
+
+    private String formatAssistantChat(String chat) {
+        return String.format(params.getAssistant(), chat);
     }
 
     @Override
     public String toString() {
+        return buildSystemPrompt() + buildChatHistory();
+    }
+
+    private String buildSystemPrompt() {
+        return String.format(params.getSystem(), systemPrompt);
+    }
+
+    private String buildChatHistory() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format(params.getSystem(), systemPrompt));
         for (String chat : chatHistory) {
             sb.append(chat);
         }
@@ -40,7 +57,8 @@ public class ChatTemplate {
     }
 
     public String convertToInput(String structuredMemo) {
-        return toString() + String.format("<|start_header_id|>information<|end_header_id|>\\n%s<|eot_id|>",structuredMemo) + params.getSuffix();
+        return toString() + String.format("<|start_header_id|>information<|end_header_id|>\\n%s<|eot_id|>", structuredMemo)
+                + params.getSuffix();
     }
 
     public String getChatHistoryForUser() {
