@@ -81,16 +81,4 @@ public class Downloader {
 
         return fileName;
     }
-
-    // public static void main(String[] args) {
-    //     String fileURL = "https://huggingface.co/unsloth/phi-4-GGUF/resolve/main/phi-4-Q2_K.gguf";
-    //     String saveDir = "."; // カレントディレクトリに保存
-
-    //     try {
-    //         downloadFileWithProgress(fileURL, saveDir);
-    //     } catch (IOException | InterruptedException ex) {
-    //         ex.printStackTrace();
-    //     }
-    // }
 }
-
