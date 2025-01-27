@@ -12,7 +12,20 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 
+/**
+ * Downloader
+ * 
+ * ファイルをダウンロードするクラス
+ */
 public class Downloader {
+    /**
+     * ファイルをダウンロードする
+     * 
+     * @param fileURL ダウンロードするファイルのURL
+     * @param saveDir 保存先ディレクトリ
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void downloadFileWithProgress(String fileURL, String saveDir) throws IOException, InterruptedException {
         HttpClient client = createHttpClient();
         HttpRequest request = createHttpRequest(fileURL);
@@ -20,18 +33,37 @@ public class Downloader {
         handleDownloadResponse(response, fileURL, saveDir);
     }
 
+    /**
+     * HttpClientを生成する
+     * 
+     * @return HttpClient
+     */
     private static HttpClient createHttpClient() {
         return HttpClient.newBuilder()
                 .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
     }
 
+    /**
+     * HttpRequestを生成する
+     * 
+     * @param fileURL ダウンロードするファイルのURL
+     * @return HttpRequest
+     */
     private static HttpRequest createHttpRequest(String fileURL) {
         return HttpRequest.newBuilder()
                 .uri(URI.create(fileURL))
                 .build();
     }
 
+    /**
+     * ダウンロードしたファイルを保存する
+     * 
+     * @param response ダウンロードしたファイルのレスポンス
+     * @param fileURL ダウンロードするファイルのURL
+     * @param saveDir 保存先ディレクトリ
+     * @throws IOException
+     */
     private static void handleDownloadResponse(HttpResponse<InputStream> response, String fileURL, String saveDir)
             throws IOException {
         if (response.statusCode() == 200) {
@@ -45,6 +77,14 @@ public class Downloader {
         }
     }
 
+    /**
+     * ダウンロードしたデータを保存する
+     * 
+     * @param inputStream ダウンロードしたデータ
+     * @param savePath 保存先ファイルのパス
+     * @param contentLength ダウンロードするデータの長さ
+     * @throws IOException
+     */
     private static void writeDataWithProgress(InputStream inputStream, Path savePath, long contentLength)
             throws IOException {
         try (InputStream in = inputStream;
@@ -69,6 +109,13 @@ public class Downloader {
         }
     }
 
+    /**
+     * ファイル名を抽出する
+     * 
+     * @param contentDisposition Content-Dispositionヘッダー
+     * @param fileURL ダウンロードするファイルのURL
+     * @return ファイル名
+     */
     private static String extractFileName(Optional<String> contentDisposition, String fileURL) {
         String fileName = contentDisposition
                 .filter(disposition -> disposition.contains("filename="))
