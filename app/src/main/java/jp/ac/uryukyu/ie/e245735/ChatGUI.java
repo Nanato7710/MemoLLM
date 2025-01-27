@@ -20,6 +20,19 @@ import javax.swing.BorderFactory;
 import de.kherud.llama.LlamaOutput;
 import jp.ac.uryukyu.ie.e245735.params.MemoParameters;
 
+/**
+ * ChatGUI
+ * 
+ * チャット画面を表示するクラス
+ * 
+ * @param chatLabel チャット履歴を表示するラベル
+ * @param inputField ユーザーの入力を受け付けるテキストフィールド
+ * @param sendButton メッセージ送信ボタン
+ * @param memoArea メモを表示するテキストエリア
+ * @param chatTemplate チャットテンプレート
+ * @param llm LLM
+ * @param memoParams メモのパラメータ
+ */
 public class ChatGUI extends JFrame {
     private JLabel chatLabel;
     private JTextField inputField;
@@ -45,6 +58,9 @@ public class ChatGUI extends JFrame {
         sendButton.addActionListener(e -> handleSendMessage());
     }
 
+    /**
+     * UIを設定する
+     */
     private void setupUI() {
         JScrollPane chatScrollPane = new JScrollPane(chatLabel);
         chatScrollPane.setBorder(BorderFactory.createTitledBorder("Chat History"));
@@ -84,6 +100,15 @@ public class ChatGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * メッセージを送信する
+     * 
+     * ユーザーの入力を受け取り、LLMの出力を受け取ってチャット履歴に追加する
+     * 
+     * @param input ユーザーの入力
+     * 
+     * @return LLMの出力
+     */
     private String getLLMResponse(String input) {
         String response = "";
         for (LlamaOutput output : llm.generate(input)) {
@@ -92,6 +117,13 @@ public class ChatGUI extends JFrame {
         return response;
     }
 
+    /**
+     * メッセージを処理する
+     * 
+     * ユーザーの入力を受け取り、チャット履歴に追加する
+     * 
+     * @param userInput ユーザーの入力
+     */
     private void handleSendMessage() {
         String userInput = inputField.getText();
         if (!userInput.isEmpty()) {
@@ -100,6 +132,13 @@ public class ChatGUI extends JFrame {
         }
     }
 
+    /**
+     * ユーザーの入力を処理する
+     * 
+     * ユーザーの入力を受け取り、チャット履歴に追加する
+     * 
+     * @param userInput ユーザーの入力
+     */
     private void processUserChat(String userInput) {
         chatTemplate.addUserChat(userInput);
         updateChatLabel();
@@ -110,10 +149,23 @@ public class ChatGUI extends JFrame {
         updateChatLabel();
     }
 
+    /**
+     * チャット履歴を更新する
+     */
     private void updateChatLabel() {
         chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
     }
 
+    /**
+     * 検索結果を抽出する
+     * 
+     * ユーザーの入力と構造化されたメモを受け取り、検索結果を抽出する
+     * 
+     * @param userInput ユーザーの入力
+     * @param structuredMemo 構造化されたメモ
+     * 
+     * @return 検索結果
+     */
     private String extractSearchResult(String userInput, String structuredMemo) {
         String searchPrompt = chatTemplate.getPromptForSearchMemo(structuredMemo, userInput);
         String result = getLLMResponse(searchPrompt);
@@ -125,6 +177,9 @@ public class ChatGUI extends JFrame {
         return "";
     }
 
+    /**
+     * メモを保存する
+     */
     private void saveMemo() {
         String memoText = memoArea.getText();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(memoParams.getFilePath()))) {
