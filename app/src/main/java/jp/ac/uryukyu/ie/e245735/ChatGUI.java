@@ -26,10 +26,10 @@ public class ChatGUI extends JFrame {
     private JButton sendButton;
     private JTextArea memoArea;
     private ChatTemplate chatTemplate;
-    private LLM llm;
+    private Llm llm;
     private MemoParameters memoParams;
 
-    public ChatGUI(ChatTemplate chatTemplate, LLM llm, MemoParameters memoParams) {
+    public ChatGUI(ChatTemplate chatTemplate, Llm llm, MemoParameters memoParams) {
         this.chatTemplate = chatTemplate;
         this.llm = llm;
         this.memoParams = memoParams;

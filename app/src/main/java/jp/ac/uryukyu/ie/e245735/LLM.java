@@ -10,11 +10,11 @@ import de.kherud.llama.ModelParameters;
 import de.kherud.llama.args.MiroStat;
 import jp.ac.uryukyu.ie.e245735.params.LlmParameters;
 
-public class LLM {
+public class Llm {
     private LlmParameters params;
     private LlamaModel model;
 
-    public LLM(LlmParameters params) {
+    public Llm(LlmParameters params) {
         this.params = params;
         downloadModelIfAbsent();
         initializeModel();
