@@ -138,7 +138,7 @@ public class ChatTemplate {
     public String getPromptForStructuringMemo(String memo) {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format(params.getSystem(), structuringPrompt));
-        sb.append(String.format(params.getUser(), memo));
+        sb.append(formatUserChat(memo));
         return sb.toString()+params.getSuffix();
     }
 
