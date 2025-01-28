@@ -100,7 +100,7 @@ public class AppSetting {
     private void makeSetting() {
         File file = new File(workingDir + sep + "Settings.json");
         if (!file.exists()) {
-            try (InputStream is = getClass().getResourceAsStream("/Settings.json");
+            try (InputStream is = getClass().getResourceAsStream(sep+"Settings.json");
             BufferedInputStream bis = new BufferedInputStream(is);
             BufferedReader br = new BufferedReader(new InputStreamReader(bis));
             FileWriter fw = new FileWriter(file)) {
