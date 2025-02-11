@@ -44,7 +44,10 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
-tasks.named<Jar>("jar") {
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "jp.ac.uryukyu.ie.e245735.Main"
+    }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(sourceSets.main.get().output)
     dependsOn(configurations.runtimeClasspath)
