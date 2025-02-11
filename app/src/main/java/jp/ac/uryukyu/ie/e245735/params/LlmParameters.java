@@ -19,13 +19,15 @@ public class LlmParameters {
     private float temperature;
     private String stopString;
     private int gpuLayerCount;
+    private String modelDir;
 
-    public LlmParameters(String modelId, String url, float temperature, String stopString, int gpuLayerCount) {
+    public LlmParameters(String modelId, String url, float temperature, String stopString, int gpuLayerCount, String modelDir) {
         this.modelId = modelId;
         this.url = url;
         this.temperature = temperature;
         this.stopString = stopString;
         this.gpuLayerCount = gpuLayerCount;
+        this.modelDir = modelDir;
     }
 
     /**
@@ -124,15 +126,14 @@ public class LlmParameters {
      * @return モデルのパス
      */
     public String getModelPath() {
-        return buildModelPath();
+        return modelDir + AppSetting.sep + modelId + ".gguf";
     }
     
-    /**
-     * モデルのパスを構築する
-     * 
-     * @return モデルのパス
-     */
-    private String buildModelPath() {
-        return AppSetting.workingDir + "/models/" + modelId + ".gguf";
+    public void setModelDir(String modelDir) {
+        this.modelDir = modelDir;
+    }
+
+    public String getModelDir() {
+        return modelDir;
     }
 }

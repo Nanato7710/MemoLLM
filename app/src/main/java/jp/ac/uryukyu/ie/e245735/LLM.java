@@ -24,18 +24,18 @@ public class Llm {
 
     public Llm(LlmParameters params) {
         this.params = params;
-        downloadModelIfAbsent();
+        downloadModelIfAbsent(params.getModelDir());
         initializeModel();
     }
 
     /**
      * モデルファイルが存在しない場合はダウンロード
      */
-    private void downloadModelIfAbsent() {
+    private void downloadModelIfAbsent(String modelDir) {
         File modelFile = new File(params.getModelPath());
         if (!modelFile.exists()) {
             try {
-                Downloader.downloadFileWithProgress(params.getUrl(), AppSetting.workingDir + AppSetting.sep + "models");
+                Downloader.downloadFileWithProgress(params.getUrl(), modelDir);
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }

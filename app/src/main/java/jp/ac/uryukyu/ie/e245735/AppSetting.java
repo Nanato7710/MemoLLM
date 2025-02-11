@@ -34,8 +34,7 @@ import jp.ac.uryukyu.ie.e245735.params.MemoParameters;
  */
 public class AppSetting {
     public static final String sep = System.getProperty("file.separator");
-    public static final String home = System.getProperty("user.home");
-    public static final String workingDir = home + sep + ".memollm";
+    private String workingDir;
 
     private ChatTemplateParameters chatTemplateParams;
     private LlmParameters llmParams;
@@ -44,7 +43,8 @@ public class AppSetting {
     private String structuringPrompt;
     private String searchPrompt;
 
-    public AppSetting() {
+    public AppSetting(String workingDir) {
+        this.workingDir = workingDir;
         initialize();
     }
 
@@ -125,7 +125,9 @@ public class AppSetting {
                 JsonObject json = gson.fromJson(fr, JsonObject.class);
                 chatTemplateParams = gson.fromJson(json.get("ChatTemplateParams"), ChatTemplateParameters.class);
                 llmParams = gson.fromJson(json.get("LLMParams"), LlmParameters.class);
+                llmParams.setModelDir(workingDir + sep + "models");
                 memoParams = gson.fromJson(json.get("MemoParams"), MemoParameters.class);
+                memoParams.setFileDir(workingDir);
                 systemPrompt = loadPrompt("SystemPrompt.md");
                 structuringPrompt = loadPrompt("StructuringPrompt.md");
                 searchPrompt = loadPrompt("SearchPrompt.md");
@@ -258,5 +260,14 @@ public class AppSetting {
             e.printStackTrace();
         }
         return sb.toString();
+    }
+
+    /**
+     * 作業ディレクトリを取得する
+     * 
+     * @return workingDir 作業ディレクトリ
+     */
+    public String getWorkingDir() {
+        return workingDir;
     }
 }

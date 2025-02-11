@@ -15,9 +15,11 @@ import jp.ac.uryukyu.ie.e245735.AppSetting;
 public class MemoParameters {
     private String fileName;
     private String contents;
+    private String fileDir;
 
-    public MemoParameters(String fileName) {
+    public MemoParameters(String fileName, String fileDir) {
         this.fileName = fileName;
+        this.fileDir = fileDir;
     }
 
     /**
@@ -35,7 +37,16 @@ public class MemoParameters {
      * @param fileName ファイル名
      */
     public String getFilePath() {
-        return AppSetting.workingDir + AppSetting.sep + fileName;
+        return fileDir + AppSetting.sep + fileName;
+    }
+
+    /**
+     * ファイルのディレクトリを設定する
+     * 
+     * @param fileDir ファイルのディレクトリ
+     */
+    public void setFileDir(String fileDir) {
+        this.fileDir = fileDir;
     }
 
     /**
