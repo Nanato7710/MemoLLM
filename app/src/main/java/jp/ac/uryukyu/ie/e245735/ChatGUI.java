@@ -153,7 +153,7 @@ public class ChatGUI extends JFrame {
      * チャット履歴を更新する
      */
     private void updateChatLabel() {
-        chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>") + "</html>");
+        chatLabel.setText("<html>" + chatTemplate.getChatHistoryForUser().replaceAll("\n", "<br>").replaceAll("<br>Assistant:", "<hr><br>Assistant:").replaceAll("<br>You:", "<hr><br>You:") + "</html>");
     }
 
     /**
