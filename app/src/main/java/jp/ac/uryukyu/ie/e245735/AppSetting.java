@@ -23,7 +23,6 @@ import jp.ac.uryukyu.ie.e245735.params.MemoParameters;
  * アプリケーションの設定を保持するクラス
  * 
  * @param sep pathのセパレータ
- * @param home ユーザーディレクトリ
  * @param workingDir 作業ディレクトリ
  * @param chatTemplateParams チャットテンプレートのパラメータ
  * @param llmParams LLMのパラメータ

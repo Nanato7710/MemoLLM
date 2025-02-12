@@ -11,6 +11,7 @@ import jp.ac.uryukyu.ie.e245735.AppSetting;
  * 
  * @param fileName ファイル名
  * @param contents メモの内容
+ * @param fileDir  ファイルのディレクトリ
  */
 public class MemoParameters {
     private String fileName;

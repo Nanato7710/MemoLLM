@@ -12,6 +12,7 @@ import jp.ac.uryukyu.ie.e245735.AppSetting;
  * @param temperature 生成時のtemperature
  * @param stopString 生成を終了する文字列
  * @param gpuLayerCount GPUのレイヤー数
+ * @param modelDir モデルのディレクトリ
  */
 public class LlmParameters {
     private String modelId;
