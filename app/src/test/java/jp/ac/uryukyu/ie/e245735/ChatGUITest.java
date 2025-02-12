@@ -10,6 +10,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import jp.ac.uryukyu.ie.e245735.params.LlmParameters;
+import jp.ac.uryukyu.ie.e245735.params.MemoParameters;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ChatGUITest {
     private ChatTemplate chatTemp;
@@ -20,8 +23,10 @@ public class ChatGUITest {
     void setUp() throws URISyntaxException {
         AppSetting setting = new AppSetting(getClass().getResource("/").getPath());
         chatTemp = new ChatTemplate(setting.getChatTemplateParams(), setting.getSystemPrompt(), setting.getStructuringPrompt(), setting.getSearchPrompt());
-        llm = new Llm(setting.getLLMParams());
-        chatGUI = new ChatGUI(chatTemp, llm, setting.getMemoParams());
+        LlmParameters llmParams = new LlmParameters("smollm2-1.7b-instruct-q4_k_m", "https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct-GGUF/resolve/main/smollm2-1.7b-instruct-q4_k_m.gguf", 0.0f, "<|im_end|>", 43, getClass().getResource("/models").getPath());
+        llm = new Llm(llmParams);
+        MemoParameters memoParams = new MemoParameters("memo.md", getClass().getResource("/").getPath());
+        chatGUI = new ChatGUI(chatTemp, llm, memoParams);
     }
 
     @Test
